@@ -1,7 +1,7 @@
 {
   "Options": {
     "Modded": false,
-    "PluginWatchers": true,
+    "PluginWatchers": false,
     "DefaultGroups": {
       "Players": "default",
       "Administrators": "admin"
