@@ -6,7 +6,7 @@
       "Players": "default",
       "Administrators": "admin"
     },
-    "WebRequestIP": "0.0.0.0"
+    "WebRequestIP": ""
   },
   "OxideConsole": {
     "Enabled": true,
