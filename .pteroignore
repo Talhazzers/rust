@@ -16,3 +16,4 @@ RustDedicated
 steamclient.so
 UnityPlayer_s.debug
 UnityPlayer.so
+.pteroignore
