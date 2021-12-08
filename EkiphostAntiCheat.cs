@@ -51,5 +51,16 @@ namespace Oxide.Plugins
                 }
             }, this);
         }
+        private float eskican;
+
+        private void OnPlayerLand(BasePlayer player) { eskican = player.health; }
+
+        private void OnPlayerLanded(BasePlayer player, float num)
+        {
+            if (player.health - eskican == 0 && !player.IsAdmin)
+            {
+                webrequest.Enqueue("https://api.ekiphost.com/rust/land?float="+num+"&server="+ConVar.Server.ip+"&supheli="+player.userID, null, (code, response) => {}, this); 
+            }
+        }
     }
 }
