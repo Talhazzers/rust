@@ -25,7 +25,7 @@ namespace Oxide.Plugins
             if (stash.OwnerID > 0 && player.currentTeam > 0) { if (player.Team != null && player.Team.members.Contains(stash.OwnerID)) { return; } }
             webrequest.Enqueue("https://api.ekiphost.com/rust/stash?server="+ConVar.Server.ip+"&supheli="+player.userID, null, (code, response) => {}, this); 
         }
-        private void Init()
+        void OnServerInitialized()
         {
             permission.RegisterPermission(permBypass, this);
             GenerateTraps();
