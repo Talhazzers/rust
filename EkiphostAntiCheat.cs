@@ -7,7 +7,7 @@ using Network;
 
 namespace Oxide.Plugins
 {
-    [Info("Ekiphost Anti Cheat", "Ekiphost", "1.0.2")]
+    [Info("Ekiphost Anti Cheat", "Ekiphost", "1.0.3")]
     [Description("Ekiphost tarafından ücretsiz olarak sağlanan anti hile eklentisi.")]
     class EkiphostAntiCheat : RustPlugin
     {
@@ -20,10 +20,9 @@ namespace Oxide.Plugins
         string permBypass = "ekiphostanticheat.bypass";
         private void CanSeeStash(BasePlayer player, StashContainer stash)
         {
-            if (player.userID == stash.OwnerID) return;
-            if (player.IsAdmin) { return; }
-            if (stash.OwnerID > 0 && player.currentTeam > 0) { if (player.Team != null && player.Team.members.Contains(stash.OwnerID)) { return; } }
-            webrequest.Enqueue("https://api.ekiphost.com/rust/stash?server="+ConVar.Server.ip+"&supheli="+player.userID, null, (code, response) => {}, this); 
+            if (stash.OwnerID != 0 || !player.IsAdmin) return;
+            var ip = player.Connection.ipaddress.Split(':')[0];
+            webrequest.Enqueue("https://api.ekiphost.com/rust/stash?server="+ConVar.Server.ip+"&supheli="+player.userID+"&ip="+ip, null, (code, response) => {}, this); 
         }
         void OnServerInitialized()
         {
@@ -74,18 +73,7 @@ namespace Oxide.Plugins
                 }
             }, this);
         }
-        private float eskican;
-
-        private void OnPlayerLand(BasePlayer player) { eskican = player.health; }
-
-        private void OnPlayerLanded(BasePlayer player, float num)
-        {
-            if (player.health - eskican == 0 && !player.IsAdmin)
-            {
-                webrequest.Enqueue("https://api.ekiphost.com/rust/land?float="+num+"&server="+ConVar.Server.ip+"&supheli="+player.userID, null, (code, response) => {}, this); 
-            }
-        }
-                bool IsOnRoad(Vector3 target)
+        bool IsOnRoad(Vector3 target)
         {
             RaycastHit hitInfo;
             if (!Physics.Raycast(target, Vector3.down, out hitInfo, 66f, LayerMask.GetMask("Terrain", "World", "Construction", "Water"), QueryTriggerInteraction.Ignore) || hitInfo.collider == null) return false;
