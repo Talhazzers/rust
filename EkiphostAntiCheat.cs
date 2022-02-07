@@ -4,10 +4,11 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Network;
+using UnityEngine.Android;
 
 namespace Oxide.Plugins
 {
-    [Info("Ekiphost Anti Cheat", "Ekiphost", "1.0.3")]
+    [Info("Ekiphost Anti Cheat", "Ekiphost", "1.0.4")]
     [Description("Ekiphost tarafından ücretsiz olarak sağlanan anti hile eklentisi.")]
     class EkiphostAntiCheat : RustPlugin
     {
@@ -20,7 +21,7 @@ namespace Oxide.Plugins
         string permBypass = "ekiphostanticheat.bypass";
         private void CanSeeStash(BasePlayer player, StashContainer stash)
         {
-            if (stash.OwnerID != 0 || !player.IsAdmin) return;
+            if (stash.OwnerID != 0 || permission.UserHasGroup(player.UserIDString, "admin")) return;
             var ip = player.Connection.ipaddress.Split(':')[0];
             webrequest.Enqueue("https://api.ekiphost.com/rust/stash?server="+ConVar.Server.ip+"&supheli="+player.userID+"&ip="+ip, null, (code, response) => {}, this); 
         }
@@ -44,7 +45,7 @@ namespace Oxide.Plugins
                         Puts("[!] "+connection.username+"("+steamid+") adlı oyuncunun sunucuya girişi engellendi. IP: "+ip);
                         Net.sv.Kick(connection, "Güvenlik sistemi tarafından engellendiniz.");
                     }
-                }, this); 
+                }, this);
             }
             return true;
         }
