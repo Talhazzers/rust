@@ -57,7 +57,7 @@ namespace Oxide.Plugins
         {
             var supheli = Player.FindById(targetId);
             var raporlayan = reporter.userID;
-            if (!permission.UserHasPermission(supheli.userID.ToString(), permBypass) || reporter == null || type != "cheat" || !Player.IsConnected(supheli)) return;
+            if (permission.UserHasPermission(supheli.userID.ToString(), permBypass) || reporter == null || type != "cheat" || !Player.IsConnected(supheli)) return;
             webrequest.Enqueue("https://api.ekiphost.com/rust/risk?steamid="+supheli.userID, null, (code, response) => {
                 if (response == "1") {
                     Puts("[!] Riskli bir profile sahip olan "+targetName+" adlı oyuncu "+reporter.displayName+" tarafından raporlandı.");
